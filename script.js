@@ -93,16 +93,28 @@ function savePlay(Array){
     return(memory)
  }
  //===========Figure Down left and right ======
+ document.addEventListener("keyup", keyDownHandler);
+ 
+ function keyDownHandler(e) {
+     if(e.keyCode == 39) {
+        paddleX = 1;
+     }
+     else if(e.keyCode == 37) {
+         paddleX = -1;
+     }
+ }
+ 
 
+ 
 function move() {
     for(k=4; k>=0;k--){
-        aux=MemoryX[k];
+        aux=MemoryX[k]+paddleX;
         auy=MemoryY[k]+1;
         for (var n=0;n < 16;n++){
             for (var m=0;m < 10;m++){
 
                let r=(MemoryY[3]<16&&MemoryY[2]<16&&MemoryY[1]<16&&MemoryY[0]<16)
-                 if(n==auy && m==aux && auy<16){
+                 if(n==auy && m==aux && auy<16 && aux>0 && aux<10){
                     if(auy==15){
                         tablero[MemoryY[k]][m]=0;
                         tablero[auy][aux]=1;
@@ -136,6 +148,7 @@ function move() {
         //console.log(dyBank[RNGen][k],y)
     }
     globalP=0
+    paddleX=0
 
     draw();
     //Figure();
