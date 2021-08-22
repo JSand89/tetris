@@ -18,13 +18,13 @@ let x=5,y=0,dx=0,dy=1,RNGen=5;
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
-    for (var n=0;n < 16;n++){
+    for (var n=0;n < 17;n++){
         for (var m=0;m < 10;m++){
-            if(tablero[n][m]>=1){
+            if(tablero[n][m]==1){
                 //
                 ctx.rect(n*40, m*40, 40, 40);
                 ctx.strokeStyle = "#7c7673";
-                ctx.fillStyle="grey"
+                ctx.fillStyle="grey";
                 ctx.fill();
                 ctx.stroke();
                     
@@ -41,16 +41,22 @@ function draw() {
 //===================new board==========
 function Board(){ 
     velocidad=50000;
-    tablero=new Array(16);
-    memory=new Array(16);
+    tablero=new Array(17);
+    memory=new Array(17);
     color= "#e2e2e2"
-    for (var n=0;n < 16;n++){ //go for fila
+    for (var n=0;n < 17;n++){ //go for fila
          tablero[n]=new Array(9);//go for colum
          memory[n]=new Array(9);
          for (var m=0;m < 10;m++){
+             if(n<16){
               tablero[n][m]=0;
               memory[n][m]=0;
+             }else{
+                tablero[n][m]=1;
+                memory[n][m]=1;
+             }
          }
+
     }
    //console.log(tablero)// crea una matriz llena de 0
     score=0;
@@ -114,20 +120,20 @@ function move() {
             for (var m=0;m < 10;m++){
 
                let r=(MemoryY[3]<16&&MemoryY[2]<16&&MemoryY[1]<16&&MemoryY[0]<16)
-                 if(n==auy && m==aux && auy<16 && aux>0 && aux<10){
-                    if(auy==15){
-                        tablero[MemoryY[k]][m]=0;
-                        tablero[auy][aux]=1;
-                        MemoryX[k]=aux;
-                        MemoryY[k]=auy;
+                 if(n==auy && m==aux && auy<16 && aux>-1 && aux<10){
+                    if(auy==15/*||tablero[auy][aux]+tablero[m][n]>=1*/){
+                        // tablero[MemoryY[k]][m]=0;
+                        // tablero[auy][aux]=1;
+                        // MemoryX[k]=aux;
+                        // MemoryY[k]=auy;
                         Figure();
-                    }else if(auy>15){
-                        aux=MemoryX[k];
-                        auy=MemoryY[k]-1;
-                        tablero[MemoryY[k]][m]=0;
-                        tablero[auy][aux]=1;
-                        MemoryX[k]=aux;
-                        MemoryY[k]=auy;
+                    // }else if(auy>15){
+                    //     aux=MemoryX[k];
+                    //     auy=MemoryY[k]-1;
+                    //     tablero[MemoryY[k]][m]=0;
+                    //     tablero[auy][aux]=1;
+                    //     MemoryX[k]=aux;
+                    //     MemoryY[k]=auy;
                         
                     }
                     else{
