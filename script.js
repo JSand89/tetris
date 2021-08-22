@@ -7,20 +7,35 @@ dyBank=[[0,0,0,1],[0,0,0,1],[0,0,0,1],[0,0,1,1],[0,0,1,1],[0,0,0,0],[0,0,1,1]]
 //=====Memoria X Memoria Y
 let MemoryX=[0,0,0,0]
 let MemoryY=[0,0,0,0]
+var memory, tablero;
 //====== inicia la variable que mueve la ficha
-var paddleX = 0; 
+var paddleX = 0, globalP=0; 
 let score=0;
 let boxSize=40;
 let x=5,y=0,dx=0,dy=1,RNGen=5;
 
 //=======Function draw=======
-function draw(x,y,color) {
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
-    ctx.rect(x*40, y*40, 40, 40);
-    ctx.strokeStyle = "#7c7673";
-    ctx.fillStyle=color
-    ctx.fill();
-    ctx.stroke();
+    for (var n=0;n < 16;n++){
+        for (var m=0;m < 10;m++){
+            if(tablero[n][m]>=1){
+                //
+                ctx.rect(n*40, m*40, 40, 40);
+                ctx.strokeStyle = "#7c7673";
+                ctx.fillStyle="grey"
+                ctx.fill();
+                ctx.stroke();
+                    
+            }else{
+                ctx.rect(m*40, n*40, 40, 40);
+                ctx.strokeStyle = "#7c7673";
+                ctx.fill();
+                ctx.stroke();
+             }
+        }
+    }
     ctx.closePath();
 }
 //===================new board==========
@@ -35,10 +50,9 @@ function Board(){
          for (var m=0;m < 10;m++){
               tablero[n][m]=0;
               memory[n][m]=0;
-              draw(m,n,color);
          }
     }
-   console.log(tablero)// crea una matriz llena de 0
+   //console.log(tablero)// crea una matriz llena de 0
     score=0;
     //nuevaPieza();
     //console.log(nuevaPieza)
@@ -46,11 +60,12 @@ function Board(){
 //=======Random Number generator================
 function getRandomPiece(){
     RNGen=Math.floor(Math.random()*6);
-    console.log(RNGen);
-    console.log(RNGen)
+   // console.log(RNGen);
+   // console.log(RNGen)
 }
 //=============figure Starter =================================
 function Figure() {
+    getRandomPiece()
     for(k=0; k<4;k++){
         aux=x+dxBank[RNGen][k];
         auy=y+dyBank[RNGen][k];
@@ -58,40 +73,81 @@ function Figure() {
             for (var m=0;m < 10;m++){
                  if(n==auy && m==aux){
                     tablero[n][m]=1;
+                    MemoryX[k]=aux;
+                    MemoryY[k]=auy;
+                    globalP=0;
                     console.log("1");
-                   // draw(m,n,color);
+                   draw();
                  }
             }
        }
-         draw(aux,auy,"red")
+         //draw(aux,auy,"red")
         //console.log(dxBank[RNGen][k],x)
         //console.log(dyBank[RNGen][k],y)
     }
-console.log(tablero)
+//console.log(tablero)
 }
-//===========Figure Down left and right ======
-
-function figureMovement(){
-   // memory=tablero;
-    console.log("memory",memory)
-    for (let t=0;t < 16;t++){ //go for fila
-        for (let q=0;q < 10;q++){//go for colum
-            memory[t][q]=tablero[t][q]
-            if(t<1){
-                tablero[t][q]=0;
-            }else if(t<15){
-                tablero[t+1][q]=memory[t][q];
-
-            }
-        }
-   }
-   console.log("tablero",tablero)
-}
-
 //=====function save previus play=====
+function savePlay(Array){
+    memory=Array
+    return(memory)
+ }
+ //===========Figure Down left and right ======
+
+function move() {
+    for(k=4; k>=0;k--){
+        aux=MemoryX[k];
+        auy=MemoryY[k]+1;
+        for (var n=0;n < 16;n++){
+            for (var m=0;m < 10;m++){
+
+               let r=(MemoryY[3]<16&&MemoryY[2]<16&&MemoryY[1]<16&&MemoryY[0]<16)
+                 if(n==auy && m==aux && auy<16){
+                    if(auy==15){
+                        tablero[MemoryY[k]][m]=0;
+                        tablero[auy][aux]=1;
+                        MemoryX[k]=aux;
+                        MemoryY[k]=auy;
+                        Figure();
+                    }else if(auy>15){
+                        aux=MemoryX[k];
+                        auy=MemoryY[k]-1;
+                        tablero[MemoryY[k]][m]=0;
+                        tablero[auy][aux]=1;
+                        MemoryX[k]=aux;
+                        MemoryY[k]=auy;
+                        
+                    }
+                    else{
+                        tablero[MemoryY[k]][m]=0;
+                        tablero[auy][aux]=1;
+                        MemoryX[k]=aux;
+                        MemoryY[k]=auy;
+                        console.log(auy)
+                    }
+                 }
+                 
+            }
+           // globalP=+globalP+1;
+//console.log(globalP) 
+       }
+
+        //console.log(dxBank[RNGen][k],x)
+        //console.log(dyBank[RNGen][k],y)
+    }
+    globalP=0
+
+    draw();
+    //Figure();
+    console.log(MemoryY,MemoryX)
+    console.log(tablero)
+}
 
 //draw(60,0)
 getRandomPiece();
 Board();
 Figure();
-figureMovement();
+
+setInterval(move,500);
+
+// console.log(tablero)
