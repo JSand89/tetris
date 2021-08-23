@@ -1,5 +1,8 @@
+document.addEventListener("keyup", keyDownHandler);
+const star = document.getElementById("play");
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
+
 
 //====Crear figuras
 dxBank=[[0,1,-1,1],[0,1,-1,-1],[0,1,-1,1],[0,-1,1,0],[0,1,-1,0],[0,1,-1,-2],[0,1,1,0]]
@@ -81,8 +84,8 @@ function Figure() {
                     tablero[n][m]=1;
                     MemoryX[k]=aux;
                     MemoryY[k]=auy;
-                    globalP=0;
-                    console.log("1");
+                    //globalP=0;
+                    //console.log("1");
                    draw();
                  }
             }
@@ -99,7 +102,6 @@ function savePlay(Array){
     return(memory)
  }
  //===========Figure Down left and right ======
- document.addEventListener("keyup", keyDownHandler);
  
  function keyDownHandler(e) {
      if(e.keyCode == 39) {
@@ -119,8 +121,8 @@ function move() {
         for (var n=0;n < 16;n++){
             for (var m=0;m < 10;m++){
 
-               let r=(MemoryY[3]<16&&MemoryY[2]<16&&MemoryY[1]<16&&MemoryY[0]<16)
-                 if(n==auy && m==aux && auy<16 && aux>-1 && aux<10){
+               //let r=(MemoryY[3]<16&&MemoryY[2]<16&&MemoryY[1]<16&&MemoryY[0]<16)
+                 if(n==auy && m==aux && auy<16 && aux>-1 && aux<11){
                     if(auy==15/*||tablero[auy][aux]+tablero[m][n]>=1*/){
                         // tablero[MemoryY[k]][m]=0;
                         // tablero[auy][aux]=1;
@@ -166,7 +168,10 @@ function move() {
 getRandomPiece();
 Board();
 Figure();
+console.log(star)
+star.addEventListener('click', () => {
+    setInterval(move,500);
 
-setInterval(move,500);
+})
 
 // console.log(tablero)
